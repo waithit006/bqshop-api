@@ -1,21 +1,26 @@
 import "reflect-metadata";
-import {createConnection} from "typeorm";
-import {User} from "./entity/User";
+import { connectionDB } from 'databases'
+import express from 'express'
+import bodyParser from 'body-parser'
+import cors from 'cors'
 
-createConnection().then(async connection => {
+const app = express();
+const PORT = process.env.PORT || 8001;
 
-    console.log("Inserting a new user into the database...");
-    const user = new User();
-    user.firstName = "Timber";
-    user.lastName = "Saw";
-    user.age = 25;
-    await connection.manager.save(user);
-    console.log("Saved a new user with id: " + user.id);
+connectionDB
+    .then(async connection => {
+        if (connection.isConnected) {
+            console.log("Connected Database successfully");
+        }
+    })
+    .catch((error) => {
+        console.log(error);
+    })
 
-    console.log("Loading users from the database...");
-    const users = await connection.manager.find(User);
-    console.log("Loaded users: ", users);
+// Use express middleware libraly
+app.use(express.json())
+app.use(express.urlencoded({ extended: true }))
 
-    console.log("Here you can setup and run express/koa/any other framework.");
-
-}).catch(error => console.log(error));
+app.listen(PORT, () => {
+    console.log(`APP is running on PORT ${PORT}`);
+})

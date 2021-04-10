@@ -1,0 +1,59 @@
+
+version: "3.2"
+services:      
+    bqshop-api-app:
+        build: .
+        ports:
+            - 8001:8001
+        volumes:
+            - .:/usr/src/app
+            - dependecies:/usr/src/app/node_modules
+        links:
+            - redis
+            - db_bqshop
+        depends_on: 
+            - redis
+            - db_bqshop
+        environment:
+            NODE_ENV: development
+            REDIS_URL: redis://cache
+    redis:
+        image: redis
+        command: redis-server --requirepass hotelstandard
+        container_name: cache_bqshop
+        expose:
+            - 8002     
+    db_bqshop:
+        image: mysql:5.7
+        container_name: db_new_hotel
+        restart: always
+        environment:
+            MYSQL_ROOT_PASSWORD: root
+            MYSQL_DATABASE: bqshop_development
+            # MYSQL_USER: root
+            # MYSQL_PASSWORD: root
+        # command: --default-authentication-plugin=mysql_native_password
+        ports:
+            - 8003:3306
+    phpmyadmin_service_hotel:
+        image: phpmyadmin/phpmyadmin
+        # networks:
+        #     - hotelnetwork
+        depends_on: 
+            - db_bqshop
+        ports:
+            - "8004:80"
+        links:
+            - "db_bqshop"
+        environment:
+            MYSQL_USERNAME: root
+            MYSQL_ROOT_PASSWORD: root
+            PMA_HOST: db_bqshop
+            UPLOAD_LIMIT: 3000000000
+volumes:
+    dependecies:
+
+# networks:
+#     hotelnetwork:
+#         external: false
+        
