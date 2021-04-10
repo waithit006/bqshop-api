@@ -2,8 +2,10 @@ import express from 'express'
 
 const LineGateway = express();
 
-LineGateway.post('/webhook', function (res, req, next) {
-    console.log(req);
+LineGateway.post('/webhook', function (req, res, next) {
+    console.log(req.body);
+    
+    res.status(200).json({success:true})
 })
 
 export default LineGateway
