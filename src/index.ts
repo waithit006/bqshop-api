@@ -8,7 +8,7 @@ import cors from 'cors'
 import LineGateway from 'gateway/LineGateway'
 
 const app = express();
-const PORT = process.env.PORT || 8001;
+const PORT = process.env.PORT || 8010;
 
 connectionDB
     .then(async connection => {

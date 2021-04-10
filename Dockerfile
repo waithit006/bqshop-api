@@ -9,6 +9,6 @@ COPY . .
 
 RUN npm install && npm run build
 
-EXPOSE 8001
+EXPOSE 8010
 
 CMD ["npm", "run", "start"]
